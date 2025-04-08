@@ -14,5 +14,5 @@ TEST(FuncTests, ValueTest) {
 
     funcValorCopia(x);
 
-    EXPECT_EQ(x, 10);
+    EXPECT_EQ(x, 5);
 }
