@@ -13,6 +13,13 @@ void swap(int &a, int &b){
     b = temp;
 }
 
+int suma (int n) {
+    if (n == 0) {
+        return 0;
+    }
+    return n + suma(n-1);
+}
+
 void burbuja(int array[], int n) {
     for (int i = 0; i < n - 1; i++) {
         for (int j = 0; j < n - i - 1; j++) {
@@ -24,7 +31,7 @@ void burbuja(int array[], int n) {
 }
 
 void burbuja_aux(int array[], int n, int i, int j) {
-    if (j == n-1-i ) return;
+    if (j == n-i-1 ) return;
     if (array[j] > array[j+1]) {
         swap(array[j], array[j+1]);
     }

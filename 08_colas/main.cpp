@@ -35,11 +35,11 @@ int main() {
 
     valor = c->desencolar();
     std::cout << "Desencolado - Nodo con valor: " << valor << std::endl;
-    c->imprimir();
+    c->imprimir_rec();
 
     valor = c->desencolar();
     std::cout << "Desencolado - Nodo con valor: " << valor << std::endl;
-    c->imprimir();
+    c->imprimir_rec();
 
     delete c;
     return 0;

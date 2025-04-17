@@ -18,9 +18,11 @@ public:
     bool es_vacia ();
     int tamanio();
     void imprimir();
+    void imprimir_rec();
 private:
     Nodo<T> *inicio;
     Nodo<T> *final;
+    void imprimir_aux(Nodo<T>* temp);
 };
 
 template <typename T>
@@ -81,8 +83,10 @@ T Cola<T>::desencolar() {
     if (inicio == nullptr) {
         final = nullptr;
     }
+
+    T valor = temp->dato;
     delete temp;
-    return temp->dato;
+    return valor;
 }
 
 template <typename T>
@@ -93,6 +97,23 @@ void Cola<T>::imprimir() {
         std::cout << temp->dato << " -> ";
         temp = temp->siguiente;
     }
+    std::cout << " FINAL\n";
+}
+
+template <typename T>
+void Cola<T>::imprimir_aux(Nodo<T>* temp) {
+    if (temp == nullptr) {
+        return;
+    }
+    std::cout << temp->dato << " -> ";
+    imprimir_aux(temp->siguiente);
+}
+
+template <typename T>
+void Cola<T>::imprimir_rec() {
+    Nodo<T>* temp = inicio;
+    std::cout << "Cola: INICIO -> ";
+    imprimir_aux(temp);
     std::cout << " FINAL\n";
 }
 

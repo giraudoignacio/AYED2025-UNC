@@ -60,7 +60,7 @@ int Cola<T,N>::get_tamanio() {
 }
 
 template <typename T, int N>
-T Cola<T,N>::desencolar() {
+T Cola<T,N>::desencolar() {  // _ _ _ 4 3
     if (es_vacia()) {
         throw std::out_of_range("Cola vacia");
     }
