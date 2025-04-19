@@ -111,12 +111,20 @@ void Lista<T>::eliminar_final() {
         return;
     }
 
+    // Caso de lista que tiene un solo nodo
+    if (cabeza->siguiente == nullptr) {
+        delete cabeza;
+        cabeza = nullptr;
+        return;
+    }
+
     Nodo<T>* temp = cabeza;
-    while (temp->siguiente != nullptr) {
+    while (temp->siguiente->siguiente != nullptr) { // Se detiene en el penultimo nodo
         temp = temp->siguiente;
     }
+
+    delete temp->siguiente; // Eliminar el último nodo
     temp->siguiente = nullptr;
-    delete temp->siguiente;
 }
 
 template <typename T>
@@ -126,7 +134,7 @@ void Lista<T>::imprimir() {
     while (temp != nullptr) {
         std::cout << temp->dato << " -> ";
         temp = temp->siguiente;
-    }
+    }   
     std::cout << "NULL\n";
 }
 
