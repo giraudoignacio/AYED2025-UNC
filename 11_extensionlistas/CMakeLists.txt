@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.30)
-project(extensionlistas)
+project(extensionlistas2)
 set(CMAKE_CXX_STANDARD 20)
 
 include(FetchContent)
@@ -10,7 +10,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-add_executable(extensionlistas main.cpp)
-target_link_libraries(extensionlistas gtest gtest_main)
+add_executable(extensionlistas2 main.cpp)
+target_link_libraries(extensionlistas2 gtest gtest_main)
 add_subdirectory(test)
 
