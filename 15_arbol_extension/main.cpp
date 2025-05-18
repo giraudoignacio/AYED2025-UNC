@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <queue>
+#include <functional>
 using namespace std;
 
 template <class T> class nodo {
@@ -16,7 +17,7 @@ private:
     nodo<T>* raiz, * q;
     void ArbolBusq(T x, nodo<T>*& nuevo);
     void rid(nodo<T>* aux);
-    void ird(nodo<T>* aux);
+    void ird(nodo<T>* aux, function<void(nodo<T>*)> f);
     void idr(nodo<T>* aux);
     void bfs(nodo<T>* aux);
     void show(nodo<T>* aux, int n);
@@ -26,13 +27,12 @@ private:
     void mostrar_hojas(nodo<T>* aux);
     T menor(nodo<T>* aux);
     bool buscar(nodo<T>* aux, T x);
-
 public:
     arbol() { raiz = NULL; };
     ~arbol() {};
     void CreaArbolBus(T x);
     void RID() { rid(raiz); }
-    void IRD() { ird(raiz); }
+    void IRD(function<void(nodo<T>*)> f) { ird(raiz, f); }
     void IDR() { idr(raiz); }
     void BFS() { bfs(raiz); }
     void VerArbol() { show(raiz, 0); }
@@ -58,13 +58,13 @@ template <class T> void arbol<T>::ArbolBusq(T x, nodo<T>*& nuevo)
     if (x < nuevo->info) ArbolBusq(x, nuevo->izq);
 }
 
-template <class T> void arbol<T>::ird(nodo<T>* aux)
+template <class T> void arbol<T>::ird(nodo<T>* aux, function<void(nodo<T>*)> f)
 {
     if (aux == NULL) return;
 
-    ird(aux->izq);
-    cout << aux->info << " ";
-    ird(aux->der);
+    ird(aux->izq, f);
+    f(aux);
+    ird(aux->der, f);
 }
 
 template <class T> void arbol<T>::rid(nodo<T>* aux)
@@ -112,7 +112,6 @@ template <class T> void arbol<T>::show(nodo<T>* aux, int n)
     for (int i = 1; i <= n; i++) cout << "     ";
     cout << aux->info << endl;
     show(aux->izq, n + 1);
-    cout << endl;
 }
 
 template <class T> bool arbol<T>::buscar(nodo<T>* aux, T x)
@@ -143,30 +142,36 @@ template <class T> T arbol<T>::menor(nodo<T>* aux)
 
 template <class T> void arbol<T>::borrar(nodo<T>*& aux, T x)
 {
-    if (aux == NULL) {
+    if (!aux) {
         cout << "El dato" << x << " NO pertenece al arbol" << endl;
         return;
     }
 
-    if (x > aux->info) borrar(aux->der, x);
-    else if (x < aux->info) borrar(aux->izq, x);
-    else {
-        q = aux;
-        if (q->der == NULL) aux = q->izq;
-        else if (q->izq == NULL) aux = q->der;
-        else borrar_aux(q->izq);
-        delete q;
+    if (x > aux->info) {
+        borrar(aux->der, x);
+        return;
     }
+    if (x < aux->info) {
+        borrar(aux->izq, x);
+        return;
+    }
+
+    q = aux;
+    if (q->der == NULL) aux = q->izq;
+    else if (q->izq == NULL) aux = q->der;
+    else borrar_aux(q->izq);
+    delete q;
 }
 
 template <class T> void arbol<T>::borrar_aux(nodo<T>*& aux)
 {
-    if (aux->der != NULL) borrar_aux(aux->der);
-    else {
+    if (!aux->der) {
         q->info = aux->info;
         q = aux;
         aux = aux->izq;
+        return;
     }
+    borrar_aux(aux->der);
 }
 
 //-------------------------------------------------------
@@ -181,7 +186,7 @@ int main(int argc, char* argv[])
     }
     A.VerArbol();
 
-    A.IRD();
+    A.IRD([](nodo<int>* n){ cout << n->info << " "; });
     cout <<  endl << "--------------------------------" << endl;
     A.RID();
     cout<<  endl << "--------------------------------"<< endl;
@@ -190,8 +195,8 @@ int main(int argc, char* argv[])
     A.BFS();
     cout<<  endl << "--------------------------------"<< endl;
 
-    cout << "Mostrar Hojas ----------" << endl;
-    A.MostrarHojas();
+    cout << "Mostrar Hojas ----------";
+    A.IRD([](nodo<int>* n){ cout << n->info << " "; });
     cout << endl;
 
     cout << "El menor del arbol= " << A.Menor() << endl;
